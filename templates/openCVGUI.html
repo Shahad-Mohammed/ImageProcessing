@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>OpenCv</title>
+    <!-- <link rel="stylesheet" href="openCVGUI.css" /> -->
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='openCVGUI.css') }}"
+    />
+  </head>
+  <body>
+    <h1>Try now OpenCV functions!</h1>
+
+    <p class="class1">1. Upload an Image:</p>
+
+    <img class="logo" src="logoEVC.png" alt="Logo" />
+
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+      <input
+        onchange="previewImage(event)"
+        type="file"
+        name="file"
+        accept="image/*"
+      />
+      <br /><br />
+      <p class="class2">2. Choose an OpenCV function:</p>
+
+      <div class="container2">
+        <input type="submit" value="Resize" />
+        <input type="submit" value="Blur" />
+        <input type="submit" value="Gray" />
+        <input type="submit" value="Border" />
+        <input type="submit" value="Rotate" />
+      </div>
+    </form>
+
+    <!-- <div class="container2">
+      <button class="button" value="Resize">Resize</button>
+      <button class="button" value="Blur">Blur</button>
+      <button class="button" value="Gray">Gray</button>
+      <button class="button" value="Border">Border</button>
+      <button class="button" value="Rotate">Rotate</button>
+    </div> -->
+
+    <div class="box" id="image-box">
+      <img
+        id="image-preview"
+        src="{{ url_for('static', filename=filename) }}"
+        alt="Image Preview"
+      />
+    </div>
+  </body>
+  <script>
+    function previewImage(event) {
+      var file = event.target.files[0];
+      if (file.type.match("image.*")) {
+        var reader = new FileReader(); // Create a FileReader object
+        reader.onload = function () {
+          // Define the onload event
+          var img = document.getElementById("image-preview"); // Get the image element
+          img.src = reader.result; // Set the image source to the uploaded file
+        };
+        reader.readAsDataURL(event.target.files[0]); // Read the uploaded file as a data URL
+      }
+      var box = document.getElementById("image-box");
+      box.style.display = "flex"; // show the box when an image is uploaded
+    }
+  </script>
+</html>

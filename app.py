@@ -19,10 +19,22 @@ def upload():
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
         img = cv2.imread(file_path)
-        #resized_img = cv2.resize(img, (1050, 700))
-        resized_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+
+
+        oper = request.form.get('operation')
+        if oper=='Resize':
+            reulted_img = cv2.resize(img, (1050, 700))
+        elif oper=='Blur':
+            reulted_img = cv2.GaussianBlur(img, (7, 7), 0)
+        elif oper=='Gray':
+            reulted_img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        elif oper=='Border':
+            reulted_img = cv2.copyMakeBorder(img, 10, 10, 10, 10, cv2.BORDER_CONSTANT, None, value = 0)
+        else:
+            reulted_img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)
+
         resized_file_path = os.path.join(app.config['UPLOAD_FOLDER'], 'resized_' + filename)
-        cv2.imwrite(resized_file_path, resized_img)
+        cv2.imwrite(resized_file_path, reulted_img)
         return redirect(url_for('show_resized_image', filename='resized_' + filename))
     else:
         return redirect(url_for('index'))
